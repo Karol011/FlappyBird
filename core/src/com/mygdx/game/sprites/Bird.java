@@ -37,6 +37,10 @@ public class Bird {
         velocity.y = 250;
     }
 
+    public void dispose() {
+        bird.dispose();
+    }
+
     public Vector3 getPosition() {
         return position;
     }
