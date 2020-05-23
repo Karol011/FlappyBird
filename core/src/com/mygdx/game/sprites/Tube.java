@@ -1,6 +1,7 @@
 package com.mygdx.game.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.Random;
@@ -12,6 +13,8 @@ public class Tube {
     private static final int LOWEST_OPENING = 120;
     private Texture bottomTube, topTube;
     private Vector2 posTopTube, posBottomTube;
+    private Rectangle boundsTop;
+    private Rectangle boundsBottom;
     private Random random;
 
     public Tube(float x) {
@@ -21,11 +24,20 @@ public class Tube {
 
         posTopTube = new Vector2(x, random.nextInt(FLUCTUATION) + TUBE_GAP + LOWEST_OPENING);
         posBottomTube = new Vector2(x, posTopTube.y - TUBE_GAP - bottomTube.getHeight());
+
+        boundsTop = new Rectangle(posTopTube.x, posTopTube.y, topTube.getWidth(), topTube.getHeight());
+        boundsBottom = new Rectangle(posBottomTube.x, posBottomTube.y, bottomTube.getWidth(), bottomTube.getHeight());
     }
 
     public void reposition(float x) {
         posTopTube.set(x, random.nextInt(FLUCTUATION) + TUBE_GAP + LOWEST_OPENING);
         posBottomTube.set(x, posTopTube.y - TUBE_GAP - bottomTube.getHeight());
+        boundsTop.setPosition(posTopTube.x, posTopTube.y);
+        boundsBottom.setPosition(posBottomTube.x, posBottomTube.y);
+    }
+
+    public boolean collides(Rectangle player) {
+        return player.overlaps(boundsTop) || player.overlaps(boundsBottom);
     }
 
     public Texture getBottomTube() {
